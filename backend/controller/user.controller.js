@@ -1,5 +1,5 @@
 import User from "../models/user.model.js";
-// import bcrypt from "bcryptjs";
+import createToken from "../utils/token.util.js";
 
 const signup = async (req, res, next) => {
   try {
@@ -10,9 +10,8 @@ const signup = async (req, res, next) => {
       err.status = 400;
       throw err;
     }
-    // let salt = await bcrypt.genSalt(10);
-    // let hashedPassword = await bcrypt.hash(password, salt);
     let user = await User.create(req.body);
+    createToken(res, user._id);
     res.send({
       message: "User registered!",
       user: {
@@ -26,4 +25,27 @@ const signup = async (req, res, next) => {
   }
 };
 
-export { signup };
+const login = async (req, res, next) => {
+  try {
+    let { email, password } = req.body;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      let err = new Error(`${email} not registered!`);
+      err.status = 400;
+      throw err;
+    }
+    if (await user.matchPassword(password)) {
+      createToken(res, user._id);
+      res.send({ message: "Login Success!" });
+    } else {
+      let err = new Error("Invalid Password!");
+      err.status = 400;
+      throw err;
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { signup, login };
