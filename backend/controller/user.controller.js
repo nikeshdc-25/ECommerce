@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import createToken from "../utils/token.util.js";
 import asyncHandler from "../middleware/asynchandler.middleware.js";
+import ApiError from "../utils/apiError.js";
 
 // @desc register new user
 // @route /api/v1/users/signup
@@ -62,4 +63,42 @@ const getUsers = asyncHandler(async (req, res) => {
   let users = await User.find({}).select("-password");
   res.send(users);
 });
-export { signup, login, logout, getUsers };
+
+// @desc get user profile
+// @route /api/v1/users/profile
+// @access private
+const getUserProfile = asyncHandler(async (req, res) => {
+  res.send(req.user);
+});
+
+// @desc udpate user profile
+// @route /api/users/profile
+// @access private
+const updateUserProfile = asyncHandler(async (req, res) => {
+  let id = req.user._id;
+  let user = await User.findById(id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    if (req.body.password) user.password = req.body.password;
+    let updatedUser = await user.save();
+    res.send({ message: "User updated", user: updatedUser });
+  } else {
+    throw new ApiError(404, "User not found!");
+  }
+});
+
+const updateUser = asyncHandler(async (req, res) => {
+  let id = req.params.id;
+  let user = await User.findById(id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = Boolean(req.body.isAdmin);
+    let updatedUser = await user.save();
+    res.send({ message: "User updated!", user: updatedUser });
+  } else {
+    throw new ApiError(404, "User not found!");
+  }
+});
+export { signup, login, logout, getUsers, getUserProfile, updateUserProfile };

@@ -12,6 +12,7 @@ const checkAuth = asyncHandler(async (req, res, next) => {
     let { userId } = jwt.verify(token, process.env.JWT_SECRET);
     let user = await User.findById(userId);
     req.user = {
+      _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
