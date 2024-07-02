@@ -101,4 +101,23 @@ const updateUser = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User not found!");
   }
 });
-export { signup, login, logout, getUsers, getUserProfile, updateUserProfile };
+
+const deleteUser = asyncHandler(async (req, res) => {
+  let id = req.params.id;
+  let user = await User.findById(id);
+  if (user.isAdmin) {
+    throw new ApiError(400, "Cannot delete an admin user!");
+  }
+  await User.findByIdAndDelete(id);
+  res.send({ message: "User deleted successfully!" });
+});
+
+export {
+  signup,
+  login,
+  logout,
+  getUsers,
+  getUserProfile,
+  updateUserProfile,
+  deleteUser,
+};
