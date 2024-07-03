@@ -6,7 +6,9 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon --env-file=.env backend/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "data:load": "node backend/seeder.js",
+    "data:destroy": "node backend/seeder.js -d"
   },
   "keywords": [],
   "author": "Sushan Shakya",
@@ -15,6 +17,7 @@
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.3"
