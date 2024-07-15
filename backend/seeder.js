@@ -48,3 +48,7 @@ if (process.argv[2] == "-d") {
 } else {
   importData();
 }
+
+// Regex for email
+// regex for strong password
+// regex for url

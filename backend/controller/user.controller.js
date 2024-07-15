@@ -2,18 +2,29 @@ import User from "../models/user.model.js";
 import createToken from "../utils/token.util.js";
 import asyncHandler from "../middleware/asynchandler.middleware.js";
 import ApiError from "../utils/apiError.js";
+import { isEmail, isStrongPassword } from "../utils/validator.js";
 
 // @desc register new user
 // @route /api/v1/users/signup
 // @access public
 const signup = asyncHandler(async (req, res, next) => {
   let { email, password } = req.body;
+  if (!isEmail(email)) {
+    throw new ApiError(400, "Invalid Email!");
+  }
+  if (!isStrongPassword(password)) {
+    throw new ApiError(
+      400,
+      "Password must have atealst 1 uppercase, 1 lowercase, 1 digit and 1 special character!"
+    );
+  }
   let userexists = await User.findOne({ email });
   if (userexists) {
     let err = new Error(`User with email ${email} already exists!`);
     err.status = 400;
     throw err;
   }
+
   let user = await User.create(req.body);
   createToken(res, user._id);
   res.send({
