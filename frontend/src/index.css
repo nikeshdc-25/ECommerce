@@ -1,0 +1,12 @@
+.rating {
+  margin: 0.5rem;
+}
+
+.rating svg {
+  color: rgb(255, 146, 4);
+}
+
+.rating-text {
+  /* margin: 0.5rem; */
+  margin-bottom: 0px;
+}
