@@ -1,23 +1,31 @@
 import { Image, Row, Col, ListGroup, Button } from "react-bootstrap";
+import axios from "axios";
 import Rating from "../components/Rating";
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { addItem } from "../slices/cartSlice";
+import { useDispatch } from "react-redux";
 
 function ProductPage() {
-  let product = {
-    name: "iPhone 13 Pro 256GB Memory",
-    image: "/images/phone.jpg",
-    description:
-      "Introducing the iPhone 13 Pro. A transformative triple-camera system that adds tons of capability without complexity. An unprecedented leap in battery life",
-    brand: "Apple",
-    category: "Electronics",
-    price: 599.99,
-    countInStock: 0,
-    rating: 4.0,
-    numReviews: 8,
-  };
+  const { id } = useParams();
+  const [product, setProduct] = useState({});
+  const dispatch = useDispatch();
+  useEffect(() => {
+    axios
+      .get("/api/v1/products/" + id) // `/api/v1/products/${id}`
+      .then((resp) => setProduct(resp.data))
+      .catch((err) => console.log(err.message));
+  }, []);
 
+  const addToCartHandler = (item) => {
+    dispatch(addItem(item));
+  };
   return (
     <>
-      <Row>
+      <Link className="btn btn-light" to="/">
+        Go Back
+      </Link>
+      <Row className="my-3">
         <Col md={5}>
           <Image src={product.image} fluid />
         </Col>
@@ -58,7 +66,11 @@ function ProductPage() {
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button variant="secondary" disabled={product.countInStock <= 0}>
+              <Button
+                variant="secondary"
+                disabled={product.countInStock <= 0}
+                onClick={() => addToCartHandler(product)}
+              >
                 Add To Cart
               </Button>
             </ListGroup.Item>
