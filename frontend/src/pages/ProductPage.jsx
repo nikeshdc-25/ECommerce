@@ -1,15 +1,18 @@
-import { Image, Row, Col, ListGroup, Button } from "react-bootstrap";
+import { Image, Row, Col, ListGroup, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import Rating from "../components/Rating";
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { addItem } from "../slices/cartSlice";
 import { useDispatch } from "react-redux";
 
 function ProductPage() {
   const { id } = useParams();
+  const [qty, setQty] = useState(1);
   const [product, setProduct] = useState({});
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios
       .get("/api/v1/products/" + id) // `/api/v1/products/${id}`
@@ -19,6 +22,7 @@ function ProductPage() {
 
   const addToCartHandler = (item) => {
     dispatch(addItem(item));
+    navigate("/cart");
   };
   return (
     <>
@@ -66,10 +70,23 @@ function ProductPage() {
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
+              <Form.Control
+                as="select"
+                value={qty}
+                onChange={(e) => setQty(e.target.value)}
+              >
+                {[...Array(product.countInStock).keys()].map((x) => (
+                  <option key={x + 1}>{x + 1}</option>
+                ))}
+              </Form.Control>
+            </ListGroup.Item>
+            <ListGroup.Item>
               <Button
                 variant="secondary"
                 disabled={product.countInStock <= 0}
-                onClick={() => addToCartHandler(product)}
+                onClick={() =>
+                  addToCartHandler({ ...product, qty: Number(qty) })
+                }
               >
                 Add To Cart
               </Button>

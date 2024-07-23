@@ -22,7 +22,7 @@ function Header() {
                 <FaShoppingCart /> Cart{" "}
                 {cartItems.length > 0 && (
                   <Badge bg="success" pill>
-                    {cartItems.length}
+                    {cartItems.reduce((acc, item) => acc + item.qty, 0)}
                   </Badge>
                 )}
               </NavLink>
