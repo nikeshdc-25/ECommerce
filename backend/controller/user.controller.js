@@ -51,7 +51,14 @@ const login = asyncHandler(async (req, res, next) => {
   }
   if (await user.matchPassword(password)) {
     createToken(res, user._id);
-    res.send({ message: "Login Success!" });
+    res.send({
+      message: "Login Success!",
+      user: {
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
+    });
   } else {
     let err = new Error("Invalid Password!");
     err.status = 400;

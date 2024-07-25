@@ -17,7 +17,7 @@ const CartPage = () => {
   return (
     <>
       {cartItems.length == 0 ? (
-        <Message>
+        <Message variant="warning">
           Your cart is currently empty. <Link to="/">Go to Products</Link>
         </Message>
       ) : (
@@ -105,7 +105,12 @@ const CartPage = () => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button>Checkout</Button>
+                <Link
+                  to="/signin?redirect=/shipping"
+                  className="btn btn-secondary"
+                >
+                  Checkout
+                </Link>
               </ListGroup.Item>
             </ListGroup>
           </Col>
