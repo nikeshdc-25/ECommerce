@@ -6,7 +6,9 @@ import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Message from "../components/Message";
 const CartPage = () => {
-  const { cartItems } = useSelector((state) => state.cart);
+  const { cartItems, shippingCharge, totalPrice, itemPrice } = useSelector(
+    (state) => state.cart
+  );
   const dispatch = useDispatch();
   const changeCartQty = (item, qty) => {
     dispatch(addItem({ ...item, qty }));
@@ -75,18 +77,13 @@ const CartPage = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Net Total</Col>
-                  <Col>
-                    $
-                    {cartItems
-                      .reduce((acc, item) => acc + item.qty * item.price, 0)
-                      .toFixed(2)}
-                  </Col>
+                  <Col>${itemPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping Charge</Col>
-                  <Col>$5</Col>
+                  <Col>${shippingCharge}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
@@ -95,12 +92,7 @@ const CartPage = () => {
                     <strong>Total</strong>
                   </Col>
                   <Col>
-                    <strong>
-                      $
-                      {cartItems
-                        .reduce((acc, item) => acc + item.qty * item.price, 5)
-                        .toFixed(2)}
-                    </strong>
+                    <strong>${totalPrice}</strong>
                   </Col>
                 </Row>
               </ListGroup.Item>
