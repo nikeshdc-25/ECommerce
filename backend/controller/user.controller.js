@@ -100,7 +100,14 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     if (req.body.password) user.password = req.body.password;
     let updatedUser = await user.save();
-    res.send({ message: "User updated", user: updatedUser });
+    res.send({
+      message: "User Profile Updated",
+      user: {
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      },
+    });
   } else {
     throw new ApiError(404, "User not found!");
   }

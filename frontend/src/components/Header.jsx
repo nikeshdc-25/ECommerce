@@ -46,7 +46,13 @@ function Header() {
               </NavLink>
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="profile-dropdown">
-                  <NavDropdown.Item>Profile</NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={() => {
+                      navigate("/profile");
+                    }}
+                  >
+                    Profile
+                  </NavDropdown.Item>
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item>
@@ -55,6 +61,22 @@ function Header() {
                 <NavLink to="/signin" className="nav-link">
                   <FaUser /> Signin
                 </NavLink>
+              )}
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown
+                  title="admin"
+                  id="admin-routes"
+                  variant="dark"
+                  bg="dark"
+                >
+                  <NavDropdown.Item
+                    onClick={() => {
+                      navigate("/admin/orders");
+                    }}
+                  >
+                    Orders
+                  </NavDropdown.Item>
+                </NavDropdown>
               )}
             </Nav>
           </Navbar.Collapse>
