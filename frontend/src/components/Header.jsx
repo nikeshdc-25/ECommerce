@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import logo from "../assets/react.svg";
 import { logout } from "../slices/authSlice";
 import { useUserLogoutMutation } from "../slices/userApiSlice";
+import { LinkContainer } from "react-router-bootstrap";
 
 function Header() {
   const { cartItems } = useSelector((state) => state.cart);
@@ -69,13 +70,12 @@ function Header() {
                   variant="dark"
                   bg="dark"
                 >
-                  <NavDropdown.Item
-                    onClick={() => {
-                      navigate("/admin/orders");
-                    }}
-                  >
-                    Orders
-                  </NavDropdown.Item>
+                  <LinkContainer to="/admin/orders">
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/products">
+                    <NavDropdown.Item>Products</NavDropdown.Item>
+                  </LinkContainer>
                 </NavDropdown>
               )}
             </Nav>
