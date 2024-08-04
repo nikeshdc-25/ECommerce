@@ -1,11 +1,39 @@
 import React from "react";
-import { useGetProductsQuery } from "../../slices/productSlice";
+import {
+  useAddProductMutation,
+  useDeleteProductMutation,
+  useGetProductsQuery,
+} from "../../slices/productSlice";
 import { Row, Col, Button, Table } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Message from "../../components/Message";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const ProductsListPage = () => {
   const { data: products, isLoading, error } = useGetProductsQuery();
+  const [addProduct, { isLoading: productLoading }] = useAddProductMutation();
+  const [deleteProduct, { isLoading: deleteLoading }] =
+    useDeleteProductMutation();
+
+  const addProductHandler = async () => {
+    try {
+      let resp = await addProduct().unwrap();
+      toast.success(resp.message);
+    } catch (err) {
+      toast.error(err.data.error);
+    }
+  };
+  const deleteProductHandler = async (id) => {
+    if (window.confirm("Are you sure you want to delete the product?")) {
+      try {
+        let resp = await deleteProduct(id).unwrap();
+        toast.success(resp.message);
+      } catch (err) {
+        toast.error(err.data.error);
+      }
+    }
+  };
   return (
     <>
       <Row className="align-items-center mb-3">
@@ -13,7 +41,7 @@ const ProductsListPage = () => {
           <h3>Products</h3>
         </Col>
         <Col className="text-end">
-          <Button size="sm" variant="dark">
+          <Button size="sm" variant="dark" onClick={addProductHandler}>
             <FaEdit className="mb-1" /> Create Product
           </Button>
         </Col>
@@ -46,10 +74,20 @@ const ProductsListPage = () => {
                   <td>{product.category}</td>
                   <td>{product.countInStock}</td>
                   <td>
-                    <Button size="sm" variant="light">
+                    <Button
+                      as={Link}
+                      size="sm"
+                      variant="light"
+                      to={`/admin/product/${product._id}/edit`}
+                    >
                       <FaEdit />
                     </Button>
-                    <Button size="sm" variant="danger" className="ms-2">
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      className="ms-2"
+                      onClick={() => deleteProductHandler(product._id)}
+                    >
                       <FaTrash style={{ color: "white" }} />
                     </Button>
                   </td>
