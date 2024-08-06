@@ -3,11 +3,35 @@ import Product from "../models/product.model.js";
 import ApiError from "../utils/apiError.js";
 
 // @desc get all products
-// @route /api/v1/products
+// @route /api/v1/products?pageNumber=3
 // @access public
 const getProducts = asyncHandler(async (req, res) => {
-  let products = await Product.find({});
-  res.send(products);
+  const pageSize = 2;
+  const page = Number(req.query.pageNumber) || 1;
+  let keyword = req.query.keyword;
+  keyword = keyword
+    ? {
+        $or: [
+          {
+            name: {
+              $regex: keyword,
+              $options: "i",
+            },
+          },
+          {
+            description: {
+              $regex: keyword,
+              $options: "i",
+            },
+          },
+        ],
+      }
+    : {};
+  let productCount = await Product.countDocuments({ ...keyword });
+  let products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+  res.send({ products, page, pages: Math.ceil(productCount / pageSize) });
 });
 
 // @desc get product by id

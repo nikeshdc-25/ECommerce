@@ -142,34 +142,36 @@ function ProductPage() {
               )}
               <h2 className="my-4">Add Review</h2>
               {userInfo ? (
-                <Form onSubmit={addReviewHandler}>
-                  <Form.Group controlId="rating" className="my-3">
-                    <Form.Label>Rating</Form.Label>
-                    <Form.Control
-                      as="select"
-                      onChange={(e) => setRating(e.target.value)}
-                    >
-                      <option value={0}>Select Rating...</option>
-                      <option value={1}>1 - Poor</option>
-                      <option value={2}>2 - Satisfactory</option>
-                      <option value={3}>3 - Good</option>
-                      <option value={4}>4 - Very Good </option>
-                      <option value={5}>5 - Excellent</option>
-                    </Form.Control>
-                  </Form.Group>
-                  <Form.Group controlId="comment" className="my-3">
-                    <Form.Label>Comment</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      placeholder="Write Comment"
-                      onChange={(e) => setComment(e.target.value)}
-                    />
-                  </Form.Group>
-                  <Button type="submit" variant="dark" className="my-3">
-                    Add
-                  </Button>
-                </Form>
+                !userInfo.isAdmin(
+                  <Form onSubmit={addReviewHandler}>
+                    <Form.Group controlId="rating" className="my-3">
+                      <Form.Label>Rating</Form.Label>
+                      <Form.Control
+                        as="select"
+                        onChange={(e) => setRating(e.target.value)}
+                      >
+                        <option value={0}>Select Rating...</option>
+                        <option value={1}>1 - Poor</option>
+                        <option value={2}>2 - Satisfactory</option>
+                        <option value={3}>3 - Good</option>
+                        <option value={4}>4 - Very Good </option>
+                        <option value={5}>5 - Excellent</option>
+                      </Form.Control>
+                    </Form.Group>
+                    <Form.Group controlId="comment" className="my-3">
+                      <Form.Label>Comment</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        placeholder="Write Comment"
+                        onChange={(e) => setComment(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Button type="submit" variant="dark" className="my-3">
+                      Add
+                    </Button>
+                  </Form>
+                )
               ) : (
                 <Message>
                   Please <Link to="/signin">Signin</Link> to review
