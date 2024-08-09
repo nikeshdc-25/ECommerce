@@ -6,7 +6,7 @@ import ApiError from "../utils/apiError.js";
 // @route /api/v1/products?pageNumber=3
 // @access public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 2;
+  const pageSize = 4;
   const page = Number(req.query.pageNumber) || 1;
   let keyword = req.query.keyword;
   keyword = keyword
@@ -75,7 +75,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   product.name = req.body.name || product.name;
   product.description = req.body.description || product.description;
   product.category = req.body.category || product.category;
-  product.image = req.body.image || product.image;
+  product.image = req.body.image || product.image; //req.file.path
   product.brand = req.body.brand || product.brand;
   product.price = req.body.price || product.price;
   product.countInStock = req.body.countInStock || product.countInStock;
@@ -101,7 +101,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @route /api/v1/products/topproducts/:limit
 // @access public
 const getTopProducts = asyncHandler(async (req, res) => {
-  let limit = Number(req.params.limit);
+  let limit = 3;
   let products = await Product.find({}).sort({ rating: -1 }).limit(limit);
   res.send(products);
 });

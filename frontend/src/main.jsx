@@ -24,6 +24,7 @@ import AdminRoute from "./components/AdminRoute.jsx";
 import OrdersPage from "./pages/admin/OrdersPage.jsx";
 import ProductsListPage from "./pages/admin/ProductsListPage.jsx";
 import ProductEditPage from "./pages/admin/ProductEditPage.jsx";
+import { HelmetProvider } from "react-helmet-async";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -59,6 +60,11 @@ const router = createBrowserRouter(
         loader={dataLoader}
       />
       <Route
+        path="search/:keyword/page/:pageNumber"
+        element={<HomePage />}
+        loader={dataLoader}
+      />
+      <Route
         path="page/:pageNumber"
         element={<HomePage />}
         loader={dataLoader}
@@ -86,7 +92,9 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <RouterProvider router={router} />
-  </Provider>
+  <HelmetProvider>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </HelmetProvider>
 );

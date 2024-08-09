@@ -10,7 +10,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "data:load": "node backend/seeder.js",
     "data:destroy": "node backend/seeder.js -d",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "node backend/index.js"
   },
   "keywords": [],
   "author": "Sushan Shakya",

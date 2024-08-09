@@ -5,6 +5,8 @@ import { useLoaderData, useParams } from "react-router-dom";
 import { useGetProductsQuery } from "../slices/productSlice";
 import Message from "../components/Message";
 import Paginate from "../components/Paginate";
+import ProductCarousel from "../components/ProductCarousel";
+import Meta from "../components/Meta";
 const HomePage = () => {
   // const [products, setProducts] = useState([]);
   // useEffect(() => {
@@ -23,7 +25,13 @@ const HomePage = () => {
   console.log(error);
   return (
     <>
-      <h1>Latest Products</h1>
+      <Meta />
+      {!keyword && <ProductCarousel />}
+      {keyword ? (
+        <h2>Search Results for {keyword}</h2>
+      ) : (
+        <h2>Latest Products</h2>
+      )}
       {isLoading ? (
         <h1>Loading...</h1>
       ) : error ? (
@@ -37,7 +45,11 @@ const HomePage = () => {
               </Col>
             ))}
           </Row>
-          <Paginate page={data.page} pages={data.pages} />
+          <Paginate
+            page={data.page}
+            pages={data.pages}
+            keyword={keyword ? keyword : ""}
+          />
         </>
       )}
     </>
