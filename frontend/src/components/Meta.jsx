@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 
 function Meta({
-  title = "Welcome to Broadway",
+  title = "ECart-51",
   description = "This is a simple ecomm app",
 }) {
   return (

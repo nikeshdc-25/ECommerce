@@ -30,9 +30,9 @@ const OrdersPage = () => {
             {orders.map((order) => (
               <tr key={order._id}>
                 <td>{order._id}</td>
-                <td>{order.user.name}</td>
+                <td>{order.user.username}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
-                <td>{order.totalPrice}</td>
+                <td>${order.totalPrice}</td>
                 <td>
                   {order.isPaid ? (
                     order.deliveredAt.substring(0, 10)
@@ -48,7 +48,7 @@ const OrdersPage = () => {
                   )}
                 </td>
                 <td>
-                  <Link to={`/order/${order._id}`}>
+                  <Link to={`/confirmorder/${order._id}`}>
                     <Button variant="light" size="sm">
                       Details
                     </Button>

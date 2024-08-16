@@ -1,5 +1,5 @@
+import { updateOrderStatus } from "../../../backend/controller/orderController";
 import { ORDER_URL } from "../constant";
-import PlaceOrderPage from "../pages/PlaceOrderPage";
 import { apiSlice } from "./apiSlice";
 
 const orderSlice = apiSlice.injectEndpoints({
@@ -20,7 +20,6 @@ const orderSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: `${ORDER_URL}/myorders`,
       }),
-      keepUnusedDataFor: 5,
     }),
     getAllOrders: builder.query({
       query: () => ({
@@ -42,5 +41,5 @@ export const {
   useGetOrderByIdQuery,
   useGetMyOrdersQuery,
   useGetAllOrdersQuery,
-  useUpdateOrderStatusMutation,
+  useUpdateOrderStatusMutation
 } = orderSlice;

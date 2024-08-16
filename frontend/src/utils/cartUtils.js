@@ -1,3 +1,5 @@
+//To update the cart page prices and shipping logic.
+
 export const updateCart = (state) => {
   state.itemPrice = Number(
     state.cartItems

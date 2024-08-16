@@ -1,82 +1,66 @@
-import { ListGroup, Row, Col, Card, Image, Badge, Form } from "react-bootstrap";
-import Message from "../components/Message";
-import { useParams, Link } from "react-router-dom";
-import {
-  useGetOrderByIdQuery,
-  useUpdateOrderStatusMutation,
-} from "../slices/orderSlice";
-import { orderStatusColor } from "../utils/orderStatusColors";
-import { useSelector } from "react-redux";
-import { FaEdit } from "react-icons/fa";
-import { useState } from "react";
+import React from "react";
+import { Col, ListGroup, Row, Image, Card, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useAddOrderMutation } from "../slices/orderSlice";
 import { toast } from "react-toastify";
+import { removeCart } from "../slices/cartSlice";
 
 function OrderPage() {
-  const [isEdit, setIsEdit] = useState(false);
-  let { id } = useParams();
-  let { data: order, isLoading, refetch, error } = useGetOrderByIdQuery(id);
-  const [updateOrderStatus, { isLoading: updateLoading }] =
-    useUpdateOrderStatusMutation();
-  const { userInfo } = useSelector((state) => state.auth);
-
-  const updateStatusHandler = async (id, status) => {
+  const { cartItems, shippingAddress, itemPrice, totalPrice, shippingCharge } =
+    useSelector((state) => state.cart);
+  const [addOrder, { isLoading }] = useAddOrderMutation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const placeOrderHandler = async () => {
     try {
-      let resp = await updateOrderStatus({ id, status }).unwrap();
-      refetch();
-      setIsEdit(false);
-      toast.success(resp.message);
+      let res = await addOrder({
+        orderItems: cartItems,
+        shippingAddress,
+        itemPrice,
+        shippingCharge,
+        totalPrice,
+      }).unwrap();
+      toast.success(res.message);
+      dispatch(removeCart())
+      navigate("/confirmorder/" + res.orderId);
     } catch (err) {
       toast.error(err.data.error);
     }
   };
-
-  return isLoading ? (
-    <h1>Loading...</h1>
-  ) : error ? (
-    <Message variant="danger">{error.data.error}</Message>
-  ) : (
+  return (
     <Row>
       <Col md={8}>
         <ListGroup variant="flush">
           <ListGroup.Item>
-            <h3>Shipping</h3>
+            <h1>Shipping</h1>
+            <br /> <h3>User Details:</h3>
             <p>
-              Name: {order.shippingAddress.recipient} |{" "}
-              {order.shippingAddress.phone}
-              <br />
-              Address: {order.shippingAddress.address} |{" "}
-              {order.shippingAddress.city}
+              <strong>Name: </strong>
+              {shippingAddress.recipient} <br />
+              <strong>Phone: </strong>
+              {shippingAddress.phone} <br />
+              <strong>Address: </strong>
+              {shippingAddress.address} <br />
+              <strong>City: </strong>
+              {shippingAddress.city} <br />
             </p>
-            {order.isDelivered ? (
-              <Message>Delivered at {order.deliveredAt}</Message>
-            ) : (
-              <Message variant="danger">Not Delivered</Message>
-            )}
           </ListGroup.Item>
           <ListGroup.Item>
-            <h3>Payment</h3>
-            <p>Mode: COD</p>
-            {order.isPaid ? (
-              <Message>Paid ${order.totalPrice}</Message>
-            ) : (
-              <Message variant="danger">Not Paid</Message>
-            )}
-          </ListGroup.Item>
-          <ListGroup.Item>
-            {order.orderItems.map((item) => (
+            {cartItems.map((item) => (
               <ListGroup.Item key={item._id}>
                 <Row>
                   <Col md={2}>
                     <Image src={item.image} fluid rounded />
                   </Col>
                   <Col>
-                    <Link to={`/product/${item.product}`}>
+                    <Link to={`/product/${item._id}`} className="nav-link">
                       <strong>{item.name}</strong>
                     </Link>
                   </Col>
                   <Col>
                     <strong>
-                      {item.qty} X {item.price} = $
+                      {item.qty} X ${item.price} = $
                       {(item.qty * item.price).toFixed(2)}
                     </strong>
                   </Col>
@@ -94,45 +78,25 @@ function OrderPage() {
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Item</Col>
-                <Col>${order.itemPrice}</Col>
+                <Col>Items</Col>
+                <Col>${itemPrice}</Col>
               </Row>
               <Row>
                 <Col>Shipping</Col>
-                <Col>${order.shippingCharge}</Col>
-              </Row>
-              <Row>
-                <Col>Total</Col>
-                <Col>${order.totalPrice}</Col>
+                <Col>${shippingCharge}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Status</Col>
-                <Col md={6}>
-                  {isEdit ? (
-                    <Form.Control
-                      as="select"
-                      onChange={(e) =>
-                        updateStatusHandler(order._id, e.target.value)
-                      }
-                    >
-                      <option>pending</option>
-                      <option>in progress</option>
-                      <option>cancelled</option>
-                      <option>delivered</option>
-                    </Form.Control>
-                  ) : (
-                    <Badge bg={orderStatusColor[order.status]}>
-                      {order.status}
-                    </Badge>
-                  )}
-                </Col>
-                {userInfo && userInfo.isAdmin && !order.isDelivered && (
-                  <Col>
-                    <FaEdit onClick={() => setIsEdit(true)} />
-                  </Col>
-                )}
+                <Col>Total</Col>
+                <Col>${totalPrice}</Col>
+              </Row>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Row>
+                <Button variant="dark" onClick={placeOrderHandler}>
+                  Place Order
+                </Button>
               </Row>
             </ListGroup.Item>
           </ListGroup>

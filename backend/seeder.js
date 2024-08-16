@@ -1,54 +1,51 @@
-import users from "./data/users.js";
-import products from "./data/products.js";
-import User from "./models/user.model.js";
-import Product from "./models/product.model.js";
-import connectDb from "./config/db.js";
-import dotenv from "dotenv";
+import users from './data/users.js';
+import products from './data/products.js';
+import User from './models/userModel.js';
+import Product from './models/productModel.js';
+import connectDB from './config/db.js';
 import colors from "colors";
 
-dotenv.config();
+process.loadEnvFile();      //To load .env
 
-connectDb();
+connectDB();
 
-async function importData() {
-  try {
+async function importData(){
+ try{
     await User.deleteMany();
     await Product.deleteMany();
 
     let newusers = await User.insertMany(users);
-    await Product.insertMany(
-      products.map((product) => {
+    await Product.insertMany(products.map((product)=>{
         return {
-          ...product,
-          user: newusers[0]._id,
+            ...product,
+            user: newusers[0]._id,
         };
-      })
-    );
+    })
+);
     console.log("Data Loaded!".green.inverse);
     process.exit();
-  } catch (err) {
+}
+catch(err){
     console.log(err.message);
     process.exit(1);
-  }
+}
 }
 
-async function destroyData() {
-  try {
-    await User.deleteMany();
-    await Product.deleteMany();
-    console.log("Data Cleared!".red.inverse);
-    process.exit();
-  } catch (err) {
-    console.log(err.message);
-    process.exit(1);
-  }
-}
-if (process.argv[2] == "-d") {
-  destroyData();
-} else {
-  importData();
+async function destroyData(){
+    try{
+        await User.deleteMany();
+        await Product.deleteMany();
+        console.log("Data Cleared!".red.inverse);
+        process.exit();
+    }
+    catch(err){
+        console.log(err.message);
+        process.exit(1);
+    }
 }
 
-// Regex for email
-// regex for strong password
-// regex for url
+if(process.argv[2] == '-D'){
+    destroyData();
+} else{
+    importData();
+}

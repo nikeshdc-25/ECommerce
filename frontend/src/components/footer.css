@@ -1,0 +1,50 @@
+.site-footer {
+    background-color: rgb(37, 37, 37);
+    color: #fff;
+    padding: 10px 0;
+    width: 100%;
+    border-top: 1px solid rgb(98, 98, 98);
+    position: relative;
+}
+.site-footer h3 {
+    color: #6f6f6f;
+}
+
+.site-footer p {
+    color: #b9b9b9;
+    margin-bottom: 5px;
+}
+
+.social-icons {
+    list-style: none;
+    padding: 0;
+}
+
+.social-icons li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.social-icons li a {
+    color: #c3c3c3;
+    font-size: 24px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.footer-links li a {
+    color: #c5c5c5;
+    text-decoration: none;
+}
+
+.footer-links li a:hover {
+    color: #fff;
+}

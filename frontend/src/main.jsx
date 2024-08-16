@@ -18,13 +18,16 @@ import { store } from "./store.js";
 import ShippingPage from "./pages/ShippingPage.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
-import PlaceOrderPage from "./pages/PlaceOrderPage.jsx";
+import WishlistPage from "./pages/WishlistPage.jsx";
+
+import ConfirmOrder from "./pages/ConfirmOrder.jsx";
 import OrderPage from "./pages/OrderPage.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
 import OrdersPage from "./pages/admin/OrdersPage.jsx";
-import ProductsListPage from "./pages/admin/ProductsListPage.jsx";
+import ProductsListPage from "./pages/admin/ProductsPage.jsx";
 import ProductEditPage from "./pages/admin/ProductEditPage.jsx";
 import { HelmetProvider } from "react-helmet-async";
+import ProductsPage from "./pages/admin/ProductsPage.jsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -71,16 +74,17 @@ const router = createBrowserRouter(
       />
       <Route path="product/:id" element={<ProductPage />} />
       <Route path="cart" element={<CartPage />} />
-      <Route path="signin" element={<LoginPage />} />
+      <Route path="login" element={<LoginPage />} />
       <Route path="" element={<PrivateRoute />}>
         <Route path="shipping" element={<ShippingPage />} />
         <Route path="profile" element={<ProfilePage />} />
-        <Route path="placeorder" element={<PlaceOrderPage />} />
-        <Route path="order/:id" element={<OrderPage />} />
+        <Route path="wishlist" element={<WishlistPage />} />
+        <Route path="order" element={<OrderPage />} />
+        <Route path="confirmorder/:id" element={<ConfirmOrder />} />
       </Route>
       <Route path="" element={<AdminRoute />}>
         <Route path="admin/orders" element={<OrdersPage />} />
-        <Route path="admin/products" element={<ProductsListPage />} />
+        <Route path="admin/products" element={<ProductsPage />} />
         <Route
           path="admin/products/page/:pageNumber"
           element={<ProductsListPage />}

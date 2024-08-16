@@ -1,6 +1,7 @@
 export const orderStatusColor = {
-  pending: "warning",
-  cancelled: "danger",
-  delivered: "success",
-  "in progress": "info",
-};
+    Pending: "warning",
+    Cancelled: "danger",
+    Delivered: "success",
+    "In Progress": "info",
+  };
+  

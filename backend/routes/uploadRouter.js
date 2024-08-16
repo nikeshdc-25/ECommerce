@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 import ApiError from "../utils/apiError.js";
-import asyncHandler from "../middleware/asynchandler.middleware.js";
+import asyncHandler from "../middleware/asyncHandler.js";
 
 const router = express.Router();
 

@@ -3,10 +3,10 @@ import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    username: {
       type: String,
       required: true,
-      minlength: 3,
+      minLength: 3,
     },
     email: {
       type: String,
@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      minlength: 6,
+      minLength: 8,
     },
     isAdmin: {
       type: Boolean,
@@ -25,12 +25,11 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-userSchema.methods.matchPassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+userSchema.methods.matchPassword = async function (password){
+  return await bcrypt.compare(password, this.password)
 };
-
-userSchema.pre("save", async function (next) {
+userSchema.pre('save', async function (next) {
+  //Another approach for password hashing!
   if (!this.isModified("password")) {
     next();
   }
