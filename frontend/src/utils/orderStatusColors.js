@@ -1,4 +1,4 @@
-export const orderStatusColor = {
+export let orderStatusColor = {
     Pending: "warning",
     Cancelled: "danger",
     Delivered: "success",
