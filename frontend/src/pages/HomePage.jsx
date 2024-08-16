@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import Product from "../components/product";
+import Product from "../components/Product";
 import { useParams } from "react-router-dom";
 import { useGetProductsQuery } from "../slices/productSlice";
 import Message from "../components/Message";
