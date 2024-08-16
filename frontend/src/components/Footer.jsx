@@ -1,4 +1,3 @@
-import { Container } from "react-bootstrap";
 import './footer.css';
 import { FaGithub, FaFacebookF , FaInstagram } from "react-icons/fa";
 
